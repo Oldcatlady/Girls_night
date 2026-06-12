@@ -1,0 +1,974 @@
+/* ===== THEMES (Farbthemen) =====
+   CSS-Variablen (Custom Properties) werden mit --name definiert.
+   var(--name) ruft sie später ab.
+   :root = gilt für das gesamte Dokument (höchste Ebene).
+   Klassen wie body.man_power überschreiben nur die Variablen –
+   alle Styles darunter bleiben identisch, nur die Farben tauschen sich aus.
+*/
+
+/* ── Standard-Theme: Girl Power (wird geladen, wenn kein anderes aktiv ist) ── */
+:root {
+    --bg: #5c0a52;           /* Seitenhintergrund (dunkel) */
+    --bg2: #3d0636;          /* Zweiter Hintergrund (noch dunkler, z.B. für Farbverläufe) */
+    --card-bg: #7a1468;      /* Hintergrund der weißen Karten-Panels */
+    --card-bg2: #4a0840;     /* Dunklere Karten-Variante (z.B. Answer-Buttons) */
+    --text: #fde8f5;         /* Haupttextfarbe */
+    --text-muted: #f0b8d8;   /* Abgeschwächte Textfarbe (z.B. Untertitel, Labels) */
+    --btn-bg: #c2479a;       /* Button-Hintergrundfarbe */
+    --btn-hover: #df5485;    /* Button-Farbe beim Hover */
+    --btn-text: #fff;        /* Textfarbe auf Buttons */
+    --accent: #ffb3d9;       /* Akzentfarbe (Rahmen, Highlights) */
+    --correct-bg: #68cb47;   /* Hintergrund bei richtiger Antwort */
+    --correct-txt: #e5ffce;  /* Text bei richtiger Antwort */
+    --wrong-bg: #a52c2c;     /* Hintergrund bei falscher Antwort */
+    --wrong-txt: #ffb3b3;    /* Text bei falscher Antwort */
+    --progress-bg: #9b4a7a;  /* Fortschrittsbalken-Hintergrund (grauer Teil) */
+    --progress-fg: #f69dd1;  /* Fortschrittsbalken-Füllfarbe (farbiger Teil) */
+    --border: #b0569a;       /* Rahmenfarbe für Karten und Buttons */
+    --preview-bg: #4a0840;   /* Hintergrund der Theme-Vorschau auf der Startseite */
+}
+
+/* ── Theme: Man Power ──
+   body.man_power = Diese Variablen gelten nur, wenn <body class="man_power"> gesetzt ist.
+   JavaScript setzt/entfernt diese Klasse beim Theme-Wechsel. */
+body.man_power {
+    --bg: #060d61;
+    --bg2: #07192e;
+    --card-bg: #1a4070;
+    --card-bg2: #0d305a;
+    --text: #d6eaff;
+    --text-muted: #8ab8e8;
+    --btn-bg: #2971b8;
+    --btn-hover: #1d93a8;
+    --btn-text: #fff;
+    --accent: #7ec8f4;
+    --correct-bg: #159857;
+    --correct-txt: #b8f4c8;
+    --wrong-bg: #973434;
+    --wrong-txt: #ffc0c0;
+    --progress-bg: #1c3d5e;
+    --progress-fg: #5cd0ed;
+    --border: #2a5f9e;
+    --preview-bg: #0f2a4a;
+}
+
+/* ── Theme: The Dark Side ── */
+body.dark_side {
+    --bg: #1c1c44;
+    --bg2: #020219;
+    --card-bg: #2a174f;
+    --card-bg2: #132f5f;
+    --text: #cdd6f4;
+    --text-muted: #a6adc8;
+    --btn-bg: #313244;
+    --btn-hover: #4f4162;
+    --btn-text: #cdd6f4;    /* Hier weiß → dunkelgrau, damit Text auf dunklen Buttons lesbar bleibt */
+    --accent: #89b4fa;
+    --correct-bg: #28744e;
+    --correct-txt: #c7f4c2;
+    --wrong-bg: #802d2d;
+    --wrong-txt: #f38ba8;
+    --progress-bg: #2a2a3e;
+    --progress-fg: #89b4fa;
+    --border: #45475a;
+    --preview-bg: #121220;
+}
+
+/* ── Theme: Crystal Pure (helles Theme) ── */
+body.crystal_pure {
+    --bg: #bcdef6;
+    --bg2: #ffdddd;
+    --card-bg: #c5f3fe;
+    --card-bg2: #eaf1f7;
+    --text: #1e3448;         /* Dunkler Text auf hellem Hintergrund */
+    --text-muted: #4a6a84;
+    --btn-bg: #5a8fbb;
+    --btn-hover: #3a73a8;
+    --btn-text: #fff;
+    --accent: #2c6496;
+    --correct-bg: #d0f0dd;
+    --correct-txt: #257c40;
+    --wrong-bg: #f7d6d6;
+    --wrong-txt: #9a1a1a;
+    --progress-bg: #b0c8db;
+    --progress-fg: #2a7abd;
+    --border: #8ab0cc;
+    --preview-bg: #eaf1f7;
+}
+
+
+/* ===== BASE STYLES (Grundlegende Seiten-Styles) ===== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box; /* Padding/Border werden in die Breite eingerechnet,
+                               nicht dazu addiert. Verhindert Layout-Überraschungen. */
+    margin: 0;              /* Alle Browser-Default-Abstände entfernen */
+    padding: 0;
+}
+
+body {
+    font-family: Georgia, serif;
+    background: var(--bg);         /* Theme-Hintergrundfarbe */
+    color: var(--text);            /* Theme-Textfarbe */
+    min-height: 100vh;             /* Mindestens die volle Fensterhöhe ausfüllen */
+    transition: background 0.4s, color 0.4s; /* Sanfter Übergang beim Theme-Wechsel */
+}
+
+/* Alle drei "Seiten" (Start, Quiz, Ergebnis) sind standardmäßig unsichtbar */
+.page {
+    display: none;
+}
+
+/* Nur die Seite mit class="active" wird angezeigt.
+   JavaScript wechselt diese Klasse, um zwischen den Seiten zu navigieren. */
+.page.active {
+    display: block;
+}
+
+/* Zentrierende Wrapper-Box mit maximaler Breite */
+.container {
+    max-width: 640px;    /* Auf breiten Bildschirmen nicht breiter als 640px */
+    margin: 0 auto;      /* Links und rechts automatisch → horizontal zentriert */
+    padding: 24px 12px 60px;
+    
+    
+    /* Oben 40px, Links/Rechts 16px, Unten 60px Luft */
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;    /* Zeilenabstand = 120% der Schriftgröße */
+}
+
+.subtitle-title {
+    font-size: 1.3rem;
+    color: var(--text-muted); /* Abgeschwächt, um visuell unter der Hauptüberschrift zu stehen */
+}
+
+
+/* ===== CARD (Wiederverwendbares Panel-Element) ===== */
+.card {
+    background: var(--card-bg);
+    padding: 28px 24px;
+    border-radius: 14px;      /* Abgerundete Ecken */
+    border: 1px solid var(--border);
+    margin-top: 12px;
+}
+
+
+/* ===== START PAGE ===== */
+.start-card {
+    text-align: center; /* Alles auf der Startseite zentriert */
+}
+
+/* Kleines Badge oben auf der Karte ("Quiz") */
+.quiz-badge {
+    display: inline-block;   /* Breite passt sich dem Inhalt an (kein voller Block) */
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;  /* Gesperrter Text für Badge-Look */
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;     /* Stark abgerundet = Pill-Form */
+    margin-bottom: 18px;
+}
+
+.intro-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 16px 0 24px;
+    line-height: 1.6;        /* Angenehmer Zeilenabstand für Fließtext */
+}
+
+
+/* ===== THEME BUTTONS ===== */
+.theme-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Zwei gleich breite Spalten */
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.theme-btn {
+    display: flex;
+    align-items: center; /* Farbpunkt und Text vertikal zentriert */
+    gap: 8px;
+    background: var(--card-bg2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    font-family: Georgia, serif; /* Explizit gesetzt, weil Buttons die Schrift nicht erben */
+}
+
+.theme-btn:hover {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    transform: translateY(-1px); /* Leicht nach oben heben beim Hover */
+}
+
+/* Aktiv-Zustand: wenn dieser Theme-Button ausgewählt ist */
+.theme-btn.active-theme {
+    border-color: var(--accent);
+    background: var(--btn-hover);
+    color: var(--btn-text);
+    box-shadow: 0 0 0 2px var(--accent); /* Leuchtender Ring außen */
+}
+
+/* Kleiner Farbkreis im Theme-Button */
+.theme-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;           /* Kreis */
+    flex-shrink: 0;               /* Darf sich nicht verkleinern, wenn wenig Platz */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Halbtransparenter weißer Rand */
+}
+
+
+/* ===== THEME PREVIEW ===== */
+.theme-preview {
+    background: var(--preview-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+    display: none; /* Standardmäßig unsichtbar */
+}
+
+/* JavaScript fügt .visible hinzu, wenn ein Theme angeklickt wird */
+.theme-preview.visible {
+    display: block;
+}
+
+.preview-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.preview-question {
+    font-size: 0.88rem;
+    font-weight: bold;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.preview-answers {
+    display: flex;
+    flex-direction: column; /* Antworten untereinander */
+    gap: 6px;
+}
+
+.preview-btn {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    opacity: 0.85; /* Leicht transparent → wirkt inaktiv/neutral */
+}
+
+/* Die "richtige" Antwort in der Vorschau: volle Deckkraft + Akzentrahmen */
+.preview-btn.preview-correct {
+    opacity: 1;
+    border: 2px solid var(--accent);
+}
+
+/* Feedback-Box in der Vorschau ("✔ Richtig!") */
+.preview-feedback {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    background: var(--correct-bg);
+    color: var(--correct-txt);
+}
+
+
+/* ===== START BUTTON ===== */
+.start-btn {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 10px;
+    padding: 13px 32px;
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    width: 100%; /* Volle Breite der Karte */
+}
+
+.start-btn:hover {
+    background: var(--btn-hover);
+    transform: translateY(-1px);
+}
+
+
+/* ===== PROGRESS (Fortschrittsbereich) ===== */
+.progress-info {
+    display: flex;
+    gap: 16px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    flex-wrap: wrap; /* Wenn kein Platz: umbrechend statt überlappend */
+}
+
+/* Äußere Hülle des Balkens */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--progress-bg); /* Grauer/dunkler Hintergrundbalken */
+    border-radius: 4px;
+    margin-bottom: 14px;
+}
+
+/* Innerer farbiger Füllbalken */
+#progressFill {
+    height: 100%;
+    width: 0%;               /* Startet bei 0, JavaScript setzt dies dynamisch hoch */
+    background: var(--progress-fg);
+    border-radius: 4px;
+    transition: width 0.4s ease; /* Sanfte Animation beim Wachsen */
+}
+
+
+/* ===== QUIZ CARD – Fragetext ===== */
+#question {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+
+/* ===== ANSWER BUTTONS ===== */
+.answer-btn {
+    display: block;     /* Volle Zeile, nicht inline */
+    width: 100%;
+    margin: 6px 0;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-bg2);
+    color: var(--text);
+    text-align: left;   /* Text linksbündig (nicht zentriert wie Standard-Buttons) */
+    font-size: 0.9rem;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    line-height: 1.4;
+}
+
+/* Hover nur wenn der Button NICHT disabled ist (:not(:disabled)) */
+.answer-btn:hover:not(:disabled) {
+    background: var(--btn-hover);
+    color: var(--btn-text);
+    border-color: var(--accent);
+}
+
+/* Nach dem Antworten werden alle Buttons disabled → kein Cursor-Pointer mehr */
+.answer-btn:disabled {
+    cursor: default;
+}
+
+/* Grüne Markierung für die richtige Antwort nach dem Klick */
+.answer-btn.btn-correct {
+    background: var(--correct-bg);
+    color: var(--correct-txt);
+    border-color: var(--correct-txt);
+    opacity: 1 !important; /* !important überschreibt disabled-opacity des Browsers */
+}
+
+/* Rote Markierung für die angeklickte falsche Antwort */
+.answer-btn.btn-wrong {
+    background: var(--wrong-bg);
+    color: var(--wrong-txt);
+    border-color: var(--wrong-txt);
+    opacity: 1 !important;
+}
+
+
+/* ===== TEXT INPUT (für Freitext-Fragen) ===== */
+#textAnswer {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg2);
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: Georgia, serif;
+}
+
+/* Fokus-Ring beim Hineinklicken */
+#textAnswer:focus {
+    outline: none;            /* Browser-Standard-Outline entfernen */
+    border-color: var(--accent); /* Eigener farbiger Rahmen stattdessen */
+}
+
+
+/* ===== FEEDBACK BOX ===== */
+#feedback {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    display: none; /* Standardmäßig unsichtbar */
+}
+
+/* JavaScript fügt .correct hinzu → grüne Box erscheint */
+#feedback.correct {
+    display: block;
+    background: var(--correct-bg);
+    color: var(--correct-txt);
+    border: 1px solid var(--correct-txt);
+}
+
+/* JavaScript fügt .wrong hinzu → rote Box erscheint */
+#feedback.wrong {
+    display: block;
+    background: var(--wrong-bg);
+    color: var(--wrong-txt);
+    border: 1px solid var(--wrong-txt);
+}
+
+
+/* ===== NAV BUTTONS (Zurück / Weiter) ===== */
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* Beide Buttons teilen sich den Platz gleichmäßig (flex: 1) */
+.nav-buttons button {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 10px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-size: 0.9rem;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.nav-buttons button:hover {
+    background: var(--btn-hover);
+}
+
+
+/* ===== RESULT PAGE ===== */
+.result-card {
+    text-align: center;
+}
+
+.result-card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 24px;
+    color: var(--text);
+}
+
+#resultContent {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 28px;
+}
+
+/* Große Zahl / Note in der Ergebnisanzeige */
+.grade-badge {
+    display: inline-block;
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 12px 0;
+}
+
+/* Beide Buttons auf der Ergebnisseite teilen sich dieselbe Basisstruktur */
+.shuffle-btn,
+.restart-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+/* "Mischen & neu starten" → auffälliger Button */
+.shuffle-btn {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+}
+
+.shuffle-btn:hover {
+    background: var(--btn-hover);
+}
+
+/* "Zurück zur Startseite" → unauffälligerer sekundärer Button */
+.restart-btn {
+    background: var(--card-bg2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+.restart-btn:hover {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+}
+
+
+/* ===== QUIZ TITLE ===== */
+#quizTitle {
+    font-size: 1.1rem;
+    color: var(--text-muted); /* Kleiner und gedämpfter als die Hauptüberschrift */
+    margin-bottom: 10px;
+}
+
+
+/* ===== REVIEWED INDICATOR ===== */
+/* Kleines Pill-Badge, z.B. "Bereits beantwortet" */
+.reviewed-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+@keyframes konfettiFall {
+    0%   { transform: translateY(0px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+
+/* ===== LIZARD (Eidechsen-Maskottchen) ===== */
+
+/* Toggle-Button: position:fixed = klebt am Bildschirm, scrollt nicht mit */
+#lizardToggleBtn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 10000; /* Sehr hoher z-index → immer über allem anderen */
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: Georgia, serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Ausgegraut wenn deaktiviert */
+#lizardToggleBtn.disabled {
+    background: #555;
+    color: #aaa;
+}
+
+/* Das Eidechsen-Element selbst: position:fixed + top/left → bewegt sich per JS */
+#lizard {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 65px;
+    height: 35px;
+    z-index: 9999;
+    cursor: pointer;
+    user-select: none;   /* Verhindert versehentliche Textauswahl beim Klicken */
+    touch-action: none;  /* Verhindert Browser-Scroll-Gesten auf Touch-Geräten */
+    transition: opacity 0.3s;
+    transform-origin: center center; /* Rotationspunkt in der Mitte */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Komplett versteckt (JavaScript schaltet diese Klasse um) */
+.lizard-hidden {
+    display: none !important; /* !important überschreibt alle anderen display-Regeln */
+}
+
+/* Eidechsen-Körper (ovale grüne Form) */
+.lizard-body {
+    position: relative;
+    width: 35px;
+    height: 16px;
+    background: #4ca64c;
+    border-radius: 50%; /* Oval */
+}
+
+/* Wackel-Animation beim Laufen: skewY = schräg neigen, wechselt hin und her */
+.lizard-walk-anim .lizard-body {
+    animation: lizardWiggle 0.2s infinite alternate ease-in-out;
+    /* infinite = läuft endlos, alternate = hin und zurück */
+}
+
+/* Kopf: absolute positioniert relativ zum Körper */
+.lizard-head {
+    position: absolute;
+    right: -10px;         /* Ragt rechts aus dem Körper heraus */
+    top: -2px;
+    width: 14px;
+    height: 20px;
+    background: #73e673;  /* Helleres Grün als der Körper */
+    border-radius: 50% 40% 40% 50%; /* Asymmetrisch → organische Kopfform */
+}
+
+/* Augen */
+.lizard-eye {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #341919;  /* Dunkelbraun */
+    border-radius: 50%;
+}
+.lizard-eye.left  { top: 3px;    right: 3px; }
+.lizard-eye.right { bottom: 3px; right: 3px; }
+
+/* Blinzel-Animation */
+@keyframes eyeBlink {
+    0%, 90%, 100% { transform: scaleY(1);   } /* Die meiste Zeit offen */
+    95%            { transform: scaleY(0.1); } /* Kurz zusammengekniffen */
+}
+.lizard-blink .lizard-eye {
+    animation: eyeBlink 0.3s infinite;
+}
+
+/* Gelbe Punkte auf dem Körper (Muster) */
+.lizard-dots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* Zwei radiale Gradienten als Punktmuster überlagert */
+    background-image:
+        radial-gradient(circle, #ffff4d 2px, transparent 2px),
+        radial-gradient(circle, #ffed21 1.5px, transparent 1.5px);
+    background-size: 10px 10px;      /* Jeder Punkt hat 10x10px Platz */
+    background-position: 3px 4px, 12px 8px; /* Versatz der zwei Muster */
+    opacity: 0.9;
+}
+
+/* Beine: alle per position:absolute relativ zum Körper */
+.leg {
+    position: absolute;
+    width: 6px;
+    height: 10px;
+    background: #73e673;
+    border-radius: 3px;
+    transform-origin: top center; /* Rotiert oben → Bein-Schwing-Effekt */
+}
+/* Jedes Bein bekommt seine Position und Ausgangs-Drehung */
+.front-left  { top: -6px;    left: 22px; transform: rotate(30deg); }
+.front-right { bottom: -6px; left: 22px; transform: rotate(-30deg); transform-origin: bottom center; }
+.back-left   { top: -6px;    left: 6px;  transform: rotate(-20deg); }
+.back-right  { bottom: -6px; left: 6px;  transform: rotate(20deg);  transform-origin: bottom center; }
+
+/* Lauf-Animationen: Vorder-links + Hinter-rechts laufen synchron (Diagonale) */
+@keyframes moveLegLeft  { 0% { transform: rotate(30deg);  } 100% { transform: rotate(-10deg); } }
+@keyframes moveLegRight { 0% { transform: rotate(-30deg); } 100% { transform: rotate(10deg);  } }
+
+.lizard-walk-anim .front-left,
+.lizard-walk-anim .back-right {
+    animation: moveLegLeft 0.15s infinite alternate ease-in-out;
+}
+.lizard-walk-anim .front-right,
+.lizard-walk-anim .back-left {
+    animation: moveLegRight 0.15s infinite alternate ease-in-out;
+}
+
+/* Schwanz */
+.lizard-tail {
+    position: absolute;
+    left: -14px;             /* Ragt links aus dem Körper heraus */
+    top: 5px;
+    width: 16px;
+    height: 6px;
+    background: #4ca64c;
+    border-radius: 50% 0 0 50%; /* Links gerundet, rechts spitz = Schwanzspitze */
+    transform-origin: right center; /* Wippt von der Basis am Körper aus */
+}
+.lizard-walk-anim .lizard-tail {
+    animation: lizardTailWiggle 0.15s infinite alternate ease-in-out;
+}
+
+/* Panik-Animation beim Cursor-Kontakt */
+@keyframes lizardPanic {
+    0%   { transform: scale(1)   translate(0,   0)   rotate(0deg);   }
+    20%  { transform: scale(1.1) translate(-3px, 2px) rotate(15deg);  }
+    40%  { transform: scale(0.9) translate(3px, -2px) rotate(-15deg); }
+    60%  { transform: scale(1.1) translate(-2px,-2px) rotate(10deg);  }
+    80%  { transform: scale(0.9) translate(2px,  2px) rotate(-10deg); }
+    100% { transform: scale(1)   translate(0,   0)   rotate(0deg);   }
+}
+.lizard-panic {
+    animation: lizardPanic 0.1s infinite !important;
+}
+
+@keyframes lizardWiggle {
+    0%   { transform: skewY(-6deg); } /* Nach links neigen */
+    100% { transform: skewY(6deg);  } /* Nach rechts neigen */
+}
+@keyframes lizardTailWiggle {
+    0%   { transform: rotate(-20deg); }
+    100% { transform: rotate(20deg);  }
+}
+
+
+/* ===== SKULL (Schädel-Easter-Egg) ===== */
+
+#skullToggleBtn {
+    position: fixed;
+    top: 50px;   /* Direkt unter dem Eidechsen-Button (der ist bei top:10px) */
+    right: 10px;
+    z-index: 10000;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: Georgia, serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#skullToggleBtn.disabled {
+    background: #555;
+    color: #aaa;
+}
+
+#skull {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 70px;
+    z-index: 9998;  /* Leicht unter der Eidechse (9999) → Eidechse läuft "drüber" */
+    cursor: pointer;
+    user-select: none;
+    touch-action: none;
+    transform-origin: center center;
+    display: block;
+}
+
+.skull-hidden {
+    display: none !important;
+}
+
+/* Oberkopf des Schädels */
+.skull-container {
+    position: relative;
+    width: 60px;
+    height: 50px;
+    background: #e0e0d5;               /* Knochenfarbe */
+    border-radius: 50% 50% 35% 35%;    /* Oben rund, unten etwas breiter = Schädelform */
+    box-shadow: inset -4px -4px 0px rgba(0,0,0,0.15); /* Innenschatten für Tiefenwirkung */
+}
+
+/* Unterkiefer mit Kauen-Animation */
+.skull-jaw {
+    position: absolute;
+    bottom: -15px;   /* Hängt unter dem Schädel */
+    left: 15px;
+    width: 30px;
+    height: 18px;
+    background: #d0d0c2;
+    border-radius: 0 0 10px 10px;
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.15);
+    animation: skullChew 0.4s infinite alternate ease-in-out;
+    transform-origin: top center; /* Klappt oben auf → realistisches Kauen */
+}
+
+@keyframes skullChew {
+    0%   { transform: translateY(0px); } /* Mund geschlossen */
+    100% { transform: translateY(5px); } /* Mund geöffnet */
+}
+
+/* Zähne: ::before und ::after sind CSS-Pseudo-Elemente.
+   Sie erzeugen unsichtbare Kinder-Elemente ohne extra HTML.
+   Hier werden sie als Zahnreihen per gestricheltem Hintergrund genutzt. */
+.skull-jaw::before,
+.skull-container::after {
+    content: '';  /* Pflicht bei Pseudo-Elementen: ohne content erscheinen sie nicht */
+    position: absolute;
+    left: 4px;
+    width: 22px;
+    height: 4px;
+    /* Linienförmige Zähne: 2px dunkle Linie, dann 3px Lücke, wiederholt */
+    background-image: linear-gradient(to right, #333 2px, transparent 2px);
+    background-size: 5px 4px;
+}
+.skull-container::after { bottom: 0;  left: 19px; } /* Obere Zahnreihe */
+.skull-jaw::before       { top: 0;               } /* Untere Zahnreihe */
+
+/* Dreieckige Nase per clip-path */
+.skull-nose {
+    position: absolute;
+    bottom: 4px;
+    left: 26px;
+    width: 8px;
+    height: 10px;
+    background: #222;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Koordinaten: Spitze oben, Basis unten */
+}
+
+/* Augenhöhlen */
+.eye-socket {
+    position: absolute;
+    top: 14px;
+    width: 16px;
+    height: 16px;
+    background: #222;     /* Schwarze Höhle */
+    border-radius: 50%;
+    overflow: hidden;     /* Verhindert, dass Augen aus der Höhle herausragen */
+}
+.eye-socket.left  { left: 10px;  }
+.eye-socket.right { right: 10px; }
+
+/* Menschliche Augen innerhalb der Höhle */
+.human-eye {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: opacity 0.3s ease;
+    opacity: 0; /* Standardmäßig unsichtbar → Auge "fehlt" → Skelett-Look */
+}
+
+/* JavaScript fügt .visible hinzu, wenn der Schädel auf den Cursor schaut */
+.human-eye.visible {
+    opacity: 1;
+}
+
+.iris {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background: #2b7bbe; /* Blaue Iris */
+    border-radius: 50%;
+}
+
+.pupil {
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+    width: 5px;
+    height: 5px;
+    background: #000;    /* Schwarze Pupille */
+    border-radius: 50%;
+}
+
+
+/* ===== SKULL KLICK-ANIMATIONEN ===== */
+
+/* Beim Klick: Schädel dreht sich und fliegt aus dem Bildschirm */
+.skull-launching {
+    animation: skullSpinOut 1.5s forwards cubic-bezier(0.55, 0.055, 0.675, 0.19) !important;
+    /* forwards = bleibt am letzten Keyframe (verschwindet), kehrt nicht zurück */
+    /* cubic-bezier = startet langsam, beschleunigt stark → Schleuderwurf-Gefühl */
+}
+
+@keyframes skullSpinOut {
+    0% {
+        /* CSS-Variablen --startX, --startY, --startAngle werden per JS gesetzt,
+           damit die Animation dort beginnt, wo der Schädel gerade ist */
+        transform: translate(var(--startX), var(--startY)) rotate(var(--startAngle)) scale(1);
+    }
+    15% {
+        /* Kurz aufblasen bevor er losfliegt */
+        transform: translate(var(--startX), var(--startY)) rotate(calc(var(--startAngle) + 2rad)) scale(1.3);
+    }
+    100% {
+        /* Fliegt weit nach rechts oben raus, dreht sich 50 Radiant = ~8 volle Umdrehungen */
+        transform: translate(calc(var(--startX) + 800px), calc(var(--startY) - 300px)) rotate(50rad) scale(0);
+    }
+}
+
+/* Kiefer reißt beim Abflug weit auf */
+.skull-launching .skull-jaw {
+    animation: jawDrop 0.3s forwards ease-out !important;
+    /* !important überschreibt die normale skullChew-Animation */
+}
+
+@keyframes jawDrop {
+    0%   { transform: translateY(0px)  rotate(0deg);  }
+    100% { transform: translateY(25px) rotate(10deg); } /* Klappt dramatisch auf */
+}
+
+/* Augen glotzen starr beim Abflug */
+.skull-launching .human-eye {
+    opacity: 1 !important;        /* Augen aufgerissen */
+    transform: scale(1.2) !important; /* Leicht vergrößert = Schockgesicht */
+    transition: none !important;  /* Kein sanfter Übergang, sofortige Reaktion */
+}
+
+.skull-launching .iris {
+    transform: translate(0px, 0px) !important; /* Blick starr geradeaus */
+    background: #ff3333 !important;            /* Augen werden rot vor Schreck */
+}
+
+@media (max-width: 360px) {
+  .theme-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+  .subtitle-title {
+    font-size: 1.1rem;
+  }
+  #question {
+    font-size: 1rem;
+  }
+  .start-btn, .nav-buttons button,
+  .shuffle-btn, .restart-btn {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 18px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  #skullToggleBtn,
+  #lizardToggleBtn {
+    font-size: 0.7rem;
+    padding: 4px 7px;
+    right: 6px;
+  }
+}

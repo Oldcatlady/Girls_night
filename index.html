@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<!-- Gibt dem Browser an: "Dies ist eine HTML5-Seite" -->
+<html lang="de">
+<!-- lang="de" sagt dem Browser und Screenreadern: die Sprache ist Deutsch -->
+
+<head>
+    <!-- Der <head>-Bereich ist unsichtbar – enthält Metadaten und Verlinkungen -->
+
+    <meta charset="UTF-8">
+    <!-- UTF-8 = Zeichenkodierung, damit Umlaute (ä, ö, ü) korrekt angezeigt werden -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!--Für mein responsives Designe-->
+
+    <title>Fun_Quiz</title>
+    <!-- Text, der im Browser-Tab oben erscheint -->
+
+    <link rel="stylesheet" href="style.css">
+    <!-- Bindet die externe CSS-Datei "style.css" ein – dort liegen alle Styles -->
+</head>
+
+<body>
+<!-- Alles was der User sieht und anklickt, steht im <body> -->
+
+
+    <!-- ════════════════════════════════════════════
+         SEITE 1: STARTSEITE
+         Nur diese Seite hat die Klasse "active" → sie ist beim Laden sichtbar.
+         Die anderen Seiten (quiz, result) sind per CSS versteckt,
+         bis JavaScript die "active"-Klasse wechselt.
+    ════════════════════════════════════════════ -->
+    <div id="startPage" class="page active">
+        <div class="container">
+            <!-- .container ist vermutlich eine zentrierende Wrapper-Box aus style.css -->
+
+            <div class="card start-card">
+                <!-- .card = weißes/gerundetes Panel-Design aus style.css -->
+
+                <div class="quiz-badge">Quiz</div>
+                <!-- Kleines Abzeichen-Element oben auf der Karte (z.B. roter Badge) -->
+
+                <h1>Lust auf ein Quiz?<br>
+                    <span class="subtitle-title">Programmieren_macht_sapß</span>
+                </h1>
+                <!-- Hauptüberschrift. <br> = Zeilenumbruch.
+                     <span> erlaubt es, den Untertitel separat zu stylen
+                     (z.B. kleinere Schrift, andere Farbe) -->
+
+                <p class="intro-text">
+                    Wähle dein Farbthema – und schau dir die Vorschau direkt an.
+                    Wenn du bereit bist, klick auf <strong>Quiz starten</strong>.
+                </p>
+                <!-- Erklärungstext für den User. <strong> = fett -->
+
+
+                <!-- ── THEME-AUSWAHL ────────────────────────────────── -->
+                <div class="theme-buttons">
+    <!-- Vier Buttons für die vier Farbthemen -->
+    <!-- ↓ Nur die Texte hier ändern, NICHT data-theme oder onclick! -->
+
+    <button class="theme-btn" data-theme="girl_power"
+            onclick="previewTheme('girl_power')">
+        <span class="theme-dot" style="background:#e879a0;"></span>
+        Bonbon <!-- ← Anzeigename hier ändern -->
+    </button>
+
+    <button class="theme-btn" data-theme="man_power"
+            onclick="previewTheme('man_power')">
+        <span class="theme-dot" style="background:#378add;"></span>
+        Ozean <!-- ← Anzeigename hier ändern -->
+    </button>
+
+    <button class="theme-btn" data-theme="dark_side"
+            onclick="previewTheme('dark_side')">
+        <span class="theme-dot" style="background:#1e1e2e;"></span>
+        Mitternacht <!-- ← Anzeigename hier ändern -->
+    </button>
+
+    <button class="theme-btn" data-theme="crystal_pure"
+            onclick="previewTheme('crystal_pure')">
+        <span class="theme-dot" style="background:#c9d6e3;"></span>
+        Kristall <!-- ← Anzeigename hier ändern -->
+    </button>
+</div>
+<!-- Ende .theme-buttons -->
+                <!-- Ende .theme-buttons -->
+
+
+                <!-- ── THEME-VORSCHAU ──────────────────────────────── -->
+                <div id="themePreview" class="theme-preview">
+                    <!-- Dieser Bereich zeigt eine kleine Vorschau-Karte im gewählten Theme.
+                         JavaScript ändert das Styling hier, wenn ein Theme-Button geklickt wird. -->
+
+                    <div class="preview-label">Vorschau</div>
+
+                    <div class="preview-card">
+                        <!-- Mini-Nachbildung einer echten Quizfrage als Vorschau -->
+
+                        <div class="preview-question">
+                            Was ist unter der Erde und stinkt?
+                        </div>
+
+                        <div class="preview-answers">
+                            <!-- Zwei Beispiel-Antwortbuttons: einer richtig, einer falsch -->
+                            <div class="preview-btn preview-correct">
+                                C) Turnschuhe.
+                            </div>
+                            <div class="preview-btn">
+                                A) Eine Furtzel.
+                            </div>
+                        </div>
+
+                        <div class="preview-feedback correct-preview">
+                            ✔ Richtig! So sieht eine korrekte Antwort aus.
+                        </div>
+                        <!-- Zeigt dem User schon vor dem Start, wie Feedback aussieht -->
+                    </div>
+                </div>
+                <!-- Ende #themePreview -->
+
+
+                <!-- ── START-BUTTON ────────────────────────────────── -->
+                <button id="startBtn" class="start-btn" onclick="startQuiz()">
+                    Quiz starten →
+                </button>
+                <!-- Beim Klick wird die JS-Funktion startQuiz() aufgerufen,
+                     die dann die Startseite ausblendet und die Quizseite einblendet -->
+
+            </div>
+            <!-- Ende .card.start-card -->
+        </div>
+        <!-- Ende .container -->
+    </div>
+    <!-- Ende #startPage -->
+
+
+    <!-- ════════════════════════════════════════════
+         SEITE 2: QUIZSEITE
+         Anfangs OHNE "active" → unsichtbar.
+         JavaScript fügt "active" hinzu, wenn startQuiz() läuft.
+    ════════════════════════════════════════════ -->
+    <div id="quizPage" class="page">
+        <div class="container">
+
+            <h1 id="quizTitle">Märkte, Preisbildung und Marktformen</h1>
+            <!-- Überschrift der Quizseite. id="quizTitle" → JS könnte sie dynamisch ändern -->
+
+
+            <!-- ── FORTSCHRITTSANZEIGE (Text) ────────────────────── -->
+            <div class="progress-info">
+                <span id="progressText"></span>
+                <!-- Wird per JS befüllt, z.B. "Frage 3 / 10" -->
+
+                <span id="scoreText"></span>
+                <!-- Wird per JS befüllt, z.B. "✔ 2 richtig" -->
+
+                <span id="percentText"></span>
+                <!-- Wird per JS befüllt, z.B. "67%" -->
+            </div>
+
+
+            <!-- ── FORTSCHRITTSBALKEN (visuell) ─────────────────── -->
+            <div class="progress-bar">
+                <!-- Äußere Hülle des Balkens (grauer Hintergrund) -->
+                <div id="progressFill"></div>
+                <!-- Innerer farbiger Balken. JS setzt seine Breite per style.width,
+                     z.B. progressFill.style.width = "30%" -->
+            </div>
+
+
+            <!-- ── FRAGEKARTE ─────────────────────────────────────── -->
+            <div class="card">
+
+                <h2 id="question"></h2>
+                <!-- Hier erscheint der Fragetext – wird per JS befüllt -->
+
+                <div id="answers"></div>
+                <!-- Hier fügt JS die Antwort-Buttons dynamisch ein (innerHTML) -->
+
+                <input type="text" id="textAnswer"
+                       placeholder="Deine Antwort..."
+                       style="display:none;">
+                <!-- Texteingabefeld für offene Fragen (kein Multiple-Choice).
+                     display:none = erstmal unsichtbar.
+                     JS zeigt es an, wenn die aktuelle Frage ein Freitextfeld braucht. -->
+
+                <div id="feedback"></div>
+                <!-- Nach dem Antworten erscheint hier das Feedback,
+                     z.B. "✔ Richtig!" oder "✘ Falsch! Die richtige Antwort war..." -->
+
+
+                <!-- ── NAVIGATIONS-BUTTONS ────────────────────────── -->
+                <div class="nav-buttons">
+                    <button id="prevBtn" onclick="prevQuestion()"
+                            style="display:none;">← Zurück</button>
+                    <!-- "Zurück"-Button: anfangs unsichtbar (display:none),
+                         JS blendet ihn ein, sobald man nicht mehr auf Frage 1 ist -->
+
+                    <button id="nextBtn" onclick="nextQuestion()"
+                            style="display:none;">Weiter →</button>
+                    <!-- "Weiter"-Button: anfangs unsichtbar,
+                         wird nach dem Beantworten einer Frage eingeblendet.
+                         Bei der letzten Frage zeigt JS hier "Ergebnis anzeigen" o.ä. -->
+                </div>
+
+            </div>
+            <!-- Ende .card -->
+
+        </div>
+        <!-- Ende .container -->
+    </div>
+    <!-- Ende #quizPage -->
+
+
+    <!-- ════════════════════════════════════════════
+         SEITE 3: ERGEBNISSEITE
+         Erscheint nach der letzten Frage.
+    ════════════════════════════════════════════ -->
+    <div id="resultPage" class="page">
+        <div class="container">
+            <div class="card result-card">
+
+                <h2>Dein Ergebnis</h2>
+
+                <div id="resultContent"></div>
+                <!-- JS schreibt hier das Endergebnis rein,
+                     z.B. Punktzahl, Prozent, eine Bewertung -->
+
+                <button class="shuffle-btn" onclick="shuffleAndRestart()">
+                    🔀 Fragen mischen &amp; neu starten
+                </button>
+                <!-- Startet das Quiz neu, aber mit zufällig gemischten Fragen.
+                     &amp; ist die HTML-Escape-Schreibweise für das &-Zeichen -->
+
+                <button class="restart-btn" onclick="goToStart()">
+                    ← Zurück zur Startseite
+                </button>
+                <!-- Bringt den User zurück zur Theme-Auswahl (Seite 1) -->
+
+            </div>
+            <!-- Ende .card.result-card -->
+        </div>
+        <!-- Ende .container -->
+    </div>
+    <!-- Ende #resultPage -->
+
+
+    <!-- ════════════════════════════════════════════
+         SKULL-FEATURE (Easter Egg / Maskottchen)
+         Ein animierter Schädel, der ein- und ausgeblendet werden kann.
+    ════════════════════════════════════════════ -->
+
+    <button id="skullToggleBtn">💀 Aus</button>
+    <!-- Toggle-Button: schaltet den Schädel an/aus.
+         Position ist vermutlich fix (CSS: position:fixed) – immer sichtbar.
+         JS wechselt den Text zwischen "💀 An" und "💀 Aus" -->
+
+    <div id="skull" class="skull-hidden">
+        <!-- skull-hidden = per CSS unsichtbar/versteckt.
+             JS entfernt diese Klasse, wenn der Toggle-Button geklickt wird. -->
+
+        <div class="skull-container">
+
+            <!-- Linkes Auge -->
+            <div class="eye-socket left">
+                <!-- Augenhöhle links -->
+                <div class="human-eye">
+                    <!-- Das eigentliche Auge darin -->
+                    <div class="iris">
+                        <!-- Iris (farbiger Ring) -->
+                        <div class="pupil"></div>
+                        <!-- Pupille – bewegt sich per JS/CSS, verfolgt den Mauszeiger -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rechtes Auge (gleiche Struktur) -->
+            <div class="eye-socket right">
+                <div class="human-eye">
+                    <div class="iris">
+                        <div class="pupil"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skull-nose"></div>
+            <!-- Nasenloch-Bereich des Schädels (rein dekorativ per CSS) -->
+
+            <div class="skull-jaw">
+                <!-- Kiefer/Unterkiefer-Bereich -->
+                <div class="teeth"></div>
+                <!-- Zähne – vermutlich als CSS border-Tricks oder background dargestellt -->
+            </div>
+
+        </div>
+        <!-- Ende .skull-container -->
+    </div>
+    <!-- Ende #skull -->
+
+
+    <!-- ── SCRIPT-EINBINDUNG ───────────────────────────────────────── -->
+    <script src="script.js"></script>
+    <!-- Bindet die JS-Datei am ENDE des <body> ein.
+         Wichtig: Steht es hier unten, ist der gesamte HTML-DOM bereits geladen,
+         bevor JS läuft → document.getElementById() findet alle Elemente sicher. -->
+
+</body>
+</html>

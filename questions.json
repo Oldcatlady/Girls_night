@@ -1,0 +1,102 @@
+[
+  {
+    "question": "Was bedeutet eine '1' im Binärsystem für einen Computer?",
+    "options": {
+      "A": "Der Computer ist ausgeschaltet.",
+      "B": "Strom fließt – ein Signal ist aktiv.",
+      "C": "Eine Fehlermeldung liegt vor.",
+      "D": "Der Speicher ist voll."
+    },
+    "correct": "B"
+  },
+  {
+    "question": "Wer schrieb das erste Computerprogramm der Geschichte?",
+    "options": {
+      "A": "Marie Curie",
+      "B": "Grace Hopper",
+      "C": "Ada Lovelace",
+      "D": "Alan Turing"
+    },
+    "correct": "C"
+  },
+  {
+    "question": "Was ist der Unterschied zwischen Hardware und Software?",
+    "options": {
+      "A": "Hardware ist teurer als Software.",
+      "B": "Hardware sind die physischen Bauteile, Software sind die Programme.",
+      "C": "Software kann man anfassen, Hardware nicht.",
+      "D": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe."
+    },
+    "correct": "B"
+  },
+  {
+    "question": "Was macht eine Schleife (Loop) in einem Programm?",
+    "options": {
+      "A": "Sie beendet das Programm sofort.",
+      "B": "Sie speichert Daten dauerhaft.",
+      "C": "Sie wiederholt einen Codeblock mehrmals.",
+      "D": "Sie verbindet zwei Computer miteinander."
+    },
+    "correct": "C"
+  },
+  {
+    "question": "Aus welchen zwei Ziffern besteht das Binärsystem?",
+    "options": {
+      "A": "1 und 2",
+      "B": "0 und 1",
+      "C": "A und B",
+      "D": "0 und 9"
+    },
+    "correct": "B"
+  },
+  {
+    "question": "Was ist der RAM in einem Computer?",
+    "options": {
+      "A": "Der Bildschirm des Computers.",
+      "B": "Das Netzteil, das den Computer mit Strom versorgt.",
+      "C": "Der Arbeitsspeicher – er speichert Daten kurzfristig während der Nutzung.",
+      "D": "Die Festplatte, auf der alle Dateien dauerhaft liegen."
+    },
+    "correct": "C"
+  },
+  {
+    "question": "Was bedeutet 'Debuggen' in der Programmierung?",
+    "options": {
+      "A": "Ein neues Programm von Grund auf schreiben.",
+      "B": "Fehler im Code suchen und beheben.",
+      "C": "Ein Programm schneller machen.",
+      "D": "Den Computer neu starten."
+    },
+    "correct": "B"
+  },
+  {
+    "question": "Was ist das Internet?",
+    "options": {
+      "A": "Ein Programm, das nur auf Windows läuft.",
+      "B": "Ein weltweites Netzwerk aus miteinander verbundenen Computern.",
+      "C": "Der Speicherchip innerhalb eines Smartphones.",
+      "D": "Eine Programmiersprache für Webseiten."
+    },
+    "correct": "B"
+  },
+  {
+    "question": "Was macht eine 'if-Bedingung' in einem Programm?",
+    "options": {
+      "A": "Sie löscht Variablen automatisch.",
+      "B": "Sie wiederholt Code unendlich oft.",
+      "C": "Sie führt Code nur aus, wenn eine bestimmte Bedingung zutrifft.",
+      "D": "Sie verbindet zwei Funktionen miteinander."
+    },
+    "correct": "C"
+  },
+  {
+    "question": "Was ist eine Variable in der Programmierung?",
+    "options": {
+      "A": "Ein Fehler im Code.",
+      "B": "Ein benannter Speicherplatz, der einen Wert aufbewahrt.",
+      "C": "Eine spezielle Taste auf der Tastatur.",
+      "D": "Ein anderes Wort für eine Schleife."
+    },
+    "correct": "B"
+  }
+]
